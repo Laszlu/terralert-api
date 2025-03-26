@@ -1,0 +1,6 @@
+@TerralertAPI_HostAddress = http://localhost:5210
+
+GET {{TerralertAPI_HostAddress}}/api/storms/current/
+Accept: application/json
+
+###
