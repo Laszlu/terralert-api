@@ -5,14 +5,14 @@ using static TerralertAPI.EonetRequestHelper;
 namespace TerralertAPI.Controller;
 
 [ApiController]
-[Route("api/wildfires")]
-public class WildfireController : ControllerBase
+[Route("api/volcanoes")]
+public class VolcanoeController : ControllerBase
 {
     [HttpGet]
     [Route("current")]
-    public IActionResult GetCurrentWildfires()
+    public IActionResult GetCurrentVolcanoes()
     {
-        var result = EonetGetCurrentEventsForCategory("wildfires");
+        var result = EonetGetCurrentEventsForCategory("volcanoes");
         return Ok(JsonConvert.SerializeObject(result));
     }
 }
