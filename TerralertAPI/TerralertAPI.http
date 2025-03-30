@@ -4,3 +4,13 @@ GET {{TerralertAPI_HostAddress}}/api/storms/current/
 Accept: application/json
 
 ###
+
+GET {{TerralertAPI_HostAddress}}/api/earthquakes/current/
+Accept: application/json
+
+###
+
+GET {{TerralertAPI_HostAddress}}/api/wildfires/current/
+Accept: application/json
+
+###

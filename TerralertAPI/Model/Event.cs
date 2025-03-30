@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace TerralertAPI.Model;
 
-public class EonetCategoryResult
+public class EonetEventListResult
 {
     [JsonProperty("title")]
     public string? Title { get; set; }
