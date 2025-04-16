@@ -1,21 +1,6 @@
 @TerralertAPI_HostAddress = http://localhost:5210
 
-GET {{TerralertAPI_HostAddress}}/api/storms/current/
-Accept: application/json
-
-###
-
-GET {{TerralertAPI_HostAddress}}/api/earthquakes/current/
-Accept: application/json
-
-###
-
-GET {{TerralertAPI_HostAddress}}/api/wildfires/current/
-Accept: application/json
-
-###
-
-GET {{TerralertAPI_HostAddress}}/api/volcanoes/current/
+GET {{TerralertAPI_HostAddress}}/api/events/st/current
 Accept: application/json
 
 ###
