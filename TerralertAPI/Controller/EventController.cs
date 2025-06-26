@@ -67,7 +67,6 @@ public class EventController : ControllerBase
             }
         }
         
-        
         var result = await _eonetService.EonetGetEventById(eventId);
         
         return Ok(JsonConvert.SerializeObject(result));
