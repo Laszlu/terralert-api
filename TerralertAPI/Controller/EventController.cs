@@ -21,7 +21,7 @@ public class EventController : ControllerBase
     
     [HttpGet]
     [Route("{category}/current")]
-    public async Task<IActionResult> GetCurrentStorms(string category)
+    public async Task<IActionResult> GetCurrentEventsByCategory(string category)
     {
         var eonetCategory = _eonetService.ConvertEventCategory(category);
         if (eonetCategory == null)
@@ -48,7 +48,7 @@ public class EventController : ControllerBase
 
     [HttpGet]
     [Route("{category}/{eventId}")]
-    public async Task<IActionResult> GetStorm(string category, string eventId)
+    public async Task<IActionResult> GetSingleEventByCategory(string category, string eventId)
     {
         var eonetCategory = _eonetService.ConvertEventCategory(category);
         if (eonetCategory == null)
