@@ -55,14 +55,18 @@ public class EventController : ControllerBase
         {
             return BadRequest($"Invalid category requested: {category}");
         }
-        
-        if (_memoryCache.TryGetValue("currentEvents" + eonetCategory, out List<Event>? events))
+
+        foreach (var eventCategory in EventCategoryMapper.AllCategories)
         {
-            if (events != null && events.Any(e => e.Id == eventId))
+            if (_memoryCache.TryGetValue("currentEvents" + eventCategory.FullCategoryString, out List<Event>? events))
             {
-                return Ok(events.First(e => e.Id == eventId));
+                if (events != null && events.Any(e => e.Id == eventId))
+                {
+                    return Ok(events.First(e => e.Id == eventId));
+                }
             }
         }
+        
         
         var result = await _eonetService.EonetGetEventById(eventId);
         

@@ -2,6 +2,11 @@ using Microsoft.AspNetCore.HttpOverrides;
 
 namespace TerralertAPI;
 
+public interface IApiMarker
+{
+    
+}
+
 public class Program
 {
     public static void Main(string[] args)

@@ -4,18 +4,22 @@ using TerralertAPI.Model;
 
 namespace TerralertAPI;
 
+public interface IEonetService
+{
+    public string? ConvertEventCategory(string requestCategory);
+
+    public Task<List<Event>?> EonetGetCurrentEventsForCategory(string category);
+
+    public Task<Event?> EonetGetEventById(string id);
+}
+
 public class EonetService : IEonetService
 {
     public string? ConvertEventCategory(string requestCategory)
     {
-        return requestCategory switch
-        {
-            "st" => "severeStorms",
-            "wi" => "wildfires",
-            "vo" => "volcanoes",
-            "ea" => "earthquakes",
-            _ => null
-        };
+        var category = EventCategoryMapper.FromCode(requestCategory);
+
+        return category?.FullCategoryString;
     }
     
     public async Task<List<Event>?> EonetGetCurrentEventsForCategory(string category)
