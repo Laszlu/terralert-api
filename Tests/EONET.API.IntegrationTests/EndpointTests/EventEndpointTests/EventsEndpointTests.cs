@@ -28,8 +28,6 @@ public class EventsEndpointTests : IClassFixture<WebApplicationFactory<IApiMarke
         {
             var response = await _httpClient.GetAsync($"api/events/{eventCategory.Code}/current");
             
-            //_outputHelper.WriteLine(await response.Content.ReadAsStringAsync());
-            
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             response.Should().NotBeNull();
         }
