@@ -4,3 +4,8 @@ GET {{TerralertAPI_HostAddress}}/api/events/st/current
 Accept: application/json
 
 ###
+
+GET {{TerralertAPI_HostAddress}}/api/events/st/northatlantic/2020
+Accept: application/json
+
+###
