@@ -49,7 +49,7 @@ public class EventController : ControllerBase
         }
         catch (Exception e)
         {
-            return NotFound($"{e}:::{e.Message}");
+            return BadRequest(e);
         }
 
         if (results != null && results.Count != 0)
@@ -89,7 +89,7 @@ public class EventController : ControllerBase
         }
         catch (Exception e)
         {
-            return NotFound($"{e}:::{e.Message}");
+            return BadRequest(e);
         }
         
         return Ok(JsonConvert.SerializeObject(result));
@@ -135,7 +135,7 @@ public class EventController : ControllerBase
         }
         catch (Exception e)
         {
-            return NotFound($"{e}:::{e.Message}");
+            return BadRequest(e);
         }
 
         if (results != null && results.Count != 0)
