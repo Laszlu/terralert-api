@@ -27,9 +27,9 @@ public class EventsEndpointTests : IClassFixture<WebApplicationFactory<IApiMarke
         foreach (var eventCategory in EventCategoryMapper.AllCategories)
         {
             var response = await _httpClient.GetAsync($"api/events/{eventCategory.Code}/current");
-            
+            _outputHelper.WriteLine(response.Content.ReadAsStringAsync().Result);
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            response.Should().NotBeNull();
+            response.Content.Should().NotBeNull();
         }
     }
 
@@ -52,9 +52,31 @@ public class EventsEndpointTests : IClassFixture<WebApplicationFactory<IApiMarke
                 var id = singleEvent.Id;
                 var category = singleEvent.Categories?.FirstOrDefault();
                 var response = await _httpClient.GetAsync($"api/events/{EventCategoryMapper.FromFullString(category.Id).Code}/{id}");
+                _outputHelper.WriteLine(response.Content.ReadAsStringAsync().Result);
                 response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-                response.Should().NotBeNull();
+                response.Content.Should().NotBeNull();
             }
+        }
+    }
+
+    [Theory]
+    [ClassData(typeof(CategoryRegionYearData))]
+    public async Task GetEventsByCategoryRegionAndYear_ValidRequest_ReturnsEventList(EventCategory category, Region region, int year)
+    {
+        _outputHelper.WriteLine("GetEventsByCategoryRegionAndYear");
+
+        var response = await _httpClient.GetAsync($"api/events/{category.Code}/{region.Name}/{year}");
+
+        _outputHelper.WriteLine(response.Content.ReadAsStringAsync().Result);
+        
+        if (year >= DateTime.Today.Year - 10)
+        {
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+            response.Content.Should().NotBeNull();
+        }
+        else
+        {
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
     }
 }

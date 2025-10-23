@@ -1,6 +1,6 @@
 @TerralertAPI_HostAddress = http://localhost:5210
 
-GET {{TerralertAPI_HostAddress}}/api/events/st/current
+GET {{TerralertAPI_HostAddress}}/api/events/vo/current
 Accept: application/json
 
 ###
@@ -9,3 +9,21 @@ GET {{TerralertAPI_HostAddress}}/api/events/st/northatlantic/2020
 Accept: application/json
 
 ###
+
+GET {{TerralertAPI_HostAddress}}/api/events/vo/africa/2015
+Accept: application/json
+
+###
+
+GET {{TerralertAPI_HostAddress}}/api/events/ea/africa/2015
+Accept: application/json
+
+###
+
+GET {{TerralertAPI_HostAddress}}/api/events/vo/southamerica/2025
+Accept: application/json
+
+###
+
+GET {{TerralertAPI_HostAddress}}/api/events/ea/northamerica/2025
+Accept: application/json

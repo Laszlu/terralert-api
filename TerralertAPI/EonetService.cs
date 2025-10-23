@@ -53,7 +53,9 @@ public class EonetService : IEonetService
 
     public async Task<Event?> EonetGetEventById(string id)
     {
-        var result = await _httpClient.GetAsync($"https://eonet.gsfc.nasa.gov/api/v3/events/{id}");
+        using var client = new HttpClient();
+        
+        var result = await client.GetAsync($"https://eonet.gsfc.nasa.gov/api/v3/events/{id}");
         
         var jsonString = result.Content.ReadAsStringAsync().Result;
         
@@ -62,11 +64,16 @@ public class EonetService : IEonetService
     
     public async Task<List<Event>?> EonetGetEventsForCategoryRegionAndYear(EventCategory category, Region region, int year)
     {
+        using var client = new HttpClient();
+        
         var categoryString = $"category={category.FullCategoryString}";
         var regionString = $"bbox={region.MinLongitude},{region.MaxLatitude},{region.MaxLongitude},{region.MinLatitude}";
         var yearString = $"start={year}-01-01&end={year}-12-31";
+
+        var message = new HttpRequestMessage(HttpMethod.Get,
+            $"https://eonet.gsfc.nasa.gov/api/v3/events?{categoryString}&{regionString}&{yearString}&status=all") {Version = new Version(2, 0)};
         
-        var result = await _httpClient.GetAsync($"https://eonet.gsfc.nasa.gov/api/v3/events?{categoryString}&{regionString}&{yearString}&status=all");
+        var result = await client.SendAsync(message);
         
         var jsonString = result.Content.ReadAsStringAsync().Result;
         

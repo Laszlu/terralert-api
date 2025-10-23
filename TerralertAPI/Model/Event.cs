@@ -1,4 +1,9 @@
+using System.Drawing;
+using System.Text.Json;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using JsonException = Newtonsoft.Json.JsonException;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace TerralertAPI.Model;
 
@@ -77,5 +82,57 @@ public class Geometry
     public string? Type { get; set; }
 
     [JsonProperty("coordinates")]
-    public List<float>? Coordinates { get; set; }
+    [JsonConverter(typeof(CoordinatesConverter))]
+    public List<List<double>>? Coordinates { get; set; }
+}
+
+public class CoordinatesConverter : JsonConverter
+{
+    public override bool CanConvert(Type objectType) => objectType == typeof(List<List<double>>);
+
+    public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+    {
+        var token = JToken.Load(reader);
+
+        if (token.First?.Type == JTokenType.Float)
+        {
+            // [lon, lat]
+            var lon = token[0].ToObject<double>();
+            var lat = token[1].ToObject<double>();
+            return new List<List<double>> { new() { lon, lat } };
+        }
+        else
+        {
+            // [[[lon, lat], ...]]
+            return token[0].Select(p => p.Select(x => (double)x).ToList()).ToList();
+        }
+    }
+
+    public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
+    {
+        var valueCasted = value as List<List<double>>;
+        if (valueCasted.Count == 1)
+        {
+            // Point: [lon, lat]
+            writer.WriteStartArray();
+            writer.WriteValue(valueCasted[0][0]);
+            writer.WriteValue(valueCasted[0][1]);
+            writer.WriteEndArray();
+        }
+        else
+        {
+            // Polygon: [[[lon, lat], ...]]
+            writer.WriteStartArray();
+            writer.WriteStartArray();
+            foreach (var pair in valueCasted)
+            {
+                writer.WriteStartArray();
+                writer.WriteValue(pair[0]);
+                writer.WriteValue(pair[1]);
+                writer.WriteEndArray();
+            }
+            writer.WriteEndArray();
+            writer.WriteEndArray();
+        }
+    }
 }

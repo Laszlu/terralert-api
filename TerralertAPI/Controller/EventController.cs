@@ -40,15 +40,24 @@ public class EventController : ControllerBase
         {
             return Ok(JsonConvert.SerializeObject(events));
         }
-        
-        var result = await _eonetService.EonetGetCurrentEventsForCategory(eonetCategory.FullCategoryString);
 
-        if (result != null && result.Count != 0)
+        List<Event>? results;
+
+        try
         {
-            _memoryCache.Set("currentEvents_" + eonetCategory.FullCategoryString, result, _entryOptions);
+            results = await _eonetService.EonetGetCurrentEventsForCategory(eonetCategory.FullCategoryString);
+        }
+        catch (Exception e)
+        {
+            return NotFound($"{e}:::{e.Message}");
         }
 
-        return Ok(JsonConvert.SerializeObject(result));
+        if (results != null && results.Count != 0)
+        {
+            _memoryCache.Set("currentEvents_" + eonetCategory.FullCategoryString, results, _entryOptions);
+        }
+
+        return Ok(JsonConvert.SerializeObject(results));
     }
 
     [HttpGet]
@@ -71,8 +80,17 @@ public class EventController : ControllerBase
                 }
             }
         }
-            
-        var result = await _eonetService.EonetGetEventById(eventId);
+
+        Event? result;
+
+        try
+        {
+           result = await _eonetService.EonetGetEventById(eventId);
+        }
+        catch (Exception e)
+        {
+            return NotFound($"{e}:::{e.Message}");
+        }
         
         return Ok(JsonConvert.SerializeObject(result));
     }
@@ -109,13 +127,21 @@ public class EventController : ControllerBase
             return Ok(JsonConvert.SerializeObject(events));
         }
 
-        var results = await _eonetService.EonetGetEventsForCategoryRegionAndYear(eonetCategory, requestedRegion, requestedYear);
+        List<Event>? results;
+        
+        try
+        {
+            results = await _eonetService.EonetGetEventsForCategoryRegionAndYear(eonetCategory, requestedRegion, requestedYear);
+        }
+        catch (Exception e)
+        {
+            return NotFound($"{e}:::{e.Message}");
+        }
 
         if (results != null && results.Count != 0)
         {
             _memoryCache.Set($"events_{eonetCategory.FullCategoryString}_{region}_{year}", results, _entryOptions);
         }
-        
         return Ok(JsonConvert.SerializeObject(results));
     }
 }
