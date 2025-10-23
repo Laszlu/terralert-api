@@ -41,7 +41,7 @@ public class EventsEndpointTests : IClassFixture<WebApplicationFactory<IApiMarke
         var currentEvents =
             await _httpClient.GetAsync($"api/events/{EventCategoryMapper.AllCategories.First().Code}/current");
         
-        var eventList = JsonConvert.DeserializeObject<List<Event>>(await currentEvents.Content.ReadAsStringAsync());
+        var eventList = JsonConvert.DeserializeObject<List<EonetEvent>>(await currentEvents.Content.ReadAsStringAsync());
 
         if (eventList != null)
         {

@@ -36,12 +36,12 @@ public class EventController : ControllerBase
             return BadRequest($"Invalid category requested: {category}");
         }
 
-        if (_memoryCache.TryGetValue("currentEvents_" + eonetCategory.FullCategoryString, out List<Event>? events))
+        if (_memoryCache.TryGetValue("currentEvents_" + eonetCategory.FullCategoryString, out List<EonetEvent>? events))
         {
             return Ok(JsonConvert.SerializeObject(events));
         }
 
-        List<Event>? results;
+        List<ResponseEvent>? results;
 
         try
         {
@@ -72,7 +72,7 @@ public class EventController : ControllerBase
 
         foreach (var eventCategory in EventCategoryMapper.AllCategories)
         {
-            if (_memoryCache.TryGetValue("currentEvents_" + eventCategory.FullCategoryString, out List<Event>? events))
+            if (_memoryCache.TryGetValue("currentEvents_" + eventCategory.FullCategoryString, out List<EonetEvent>? events))
             {
                 if (events != null && events.Any(e => e.Id == eventId))
                 {
@@ -81,7 +81,7 @@ public class EventController : ControllerBase
             }
         }
 
-        Event? result;
+        ResponseEvent? result;
 
         try
         {
@@ -122,12 +122,12 @@ public class EventController : ControllerBase
             return BadRequest($"Requested year ({requestedYear}) is outside of tracked timeframe");
         }
 
-        if (_memoryCache.TryGetValue($"events_{eonetCategory.FullCategoryString}_{region}_{year}", out List<Event>? events))
+        if (_memoryCache.TryGetValue($"events_{eonetCategory.FullCategoryString}_{region}_{year}", out List<EonetEvent>? events))
         {
             return Ok(JsonConvert.SerializeObject(events));
         }
 
-        List<Event>? results;
+        List<ResponseEvent>? results;
         
         try
         {

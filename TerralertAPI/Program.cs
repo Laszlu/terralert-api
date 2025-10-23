@@ -19,7 +19,6 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddScoped<IEonetService, EonetService>();
-        builder.Services.AddHttpClient<EonetService>();
         builder.Services.AddMemoryCache();
         builder.Services.AddControllers();
 

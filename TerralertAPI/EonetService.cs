@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Newtonsoft.Json;
+using TerralertAPI.Helper;
 using TerralertAPI.Model;
 
 namespace TerralertAPI;
@@ -10,22 +11,15 @@ public interface IEonetService
 
     public Region? ParseRegion(string requestRegion);
 
-    public Task<List<Event>?> EonetGetCurrentEventsForCategory(string category);
+    public Task<List<ResponseEvent>?> EonetGetCurrentEventsForCategory(string category);
 
-    public Task<Event?> EonetGetEventById(string id);
+    public Task<ResponseEvent?> EonetGetEventById(string id);
 
-    public Task<List<Event>?> EonetGetEventsForCategoryRegionAndYear(EventCategory category, Region region, int year);
+    public Task<List<ResponseEvent>?> EonetGetEventsForCategoryRegionAndYear(EventCategory category, Region region, int year);
 }
 
 public class EonetService : IEonetService
 {
-    private readonly HttpClient _httpClient;
-
-    public EonetService(HttpClient httpClient)
-    {
-        _httpClient = httpClient;
-    }
-    
     public EventCategory? ParseEventCategory(string requestCategory)
     {
         var category = EventCategoryMapper.FromCode(requestCategory);
@@ -40,18 +34,38 @@ public class EonetService : IEonetService
         return region;
     }
     
-    public async Task<List<Event>?> EonetGetCurrentEventsForCategory(string category)
+    public async Task<List<ResponseEvent>?> EonetGetCurrentEventsForCategory(string category)
     {
-        var result = await _httpClient.GetAsync($"https://eonet.gsfc.nasa.gov/api/v3/events?category={category}&status=open");
+        using var client = new HttpClient();
+        
+        var result = await client.GetAsync($"https://eonet.gsfc.nasa.gov/api/v3/events?category={category}&status=open");
 
         var jsonString = result.Content.ReadAsStringAsync().Result;
         
-        var response = JsonConvert.DeserializeObject<EonetEventListResult>(jsonString);
+        var eventList = JsonConvert.DeserializeObject<EonetEventListResult>(jsonString);
 
-        return response?.Events;
+        if (eventList?.Events == null) return null;
+
+        List<ResponseEvent> responseEvents = [];
+        
+        foreach (var eventListEvent in eventList.Events)
+        {
+            try
+            {
+                responseEvents.Add(EventConversionHelper.ConvertEonetEvent(eventListEvent));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
+        }
+            
+        return responseEvents;
     }
 
-    public async Task<Event?> EonetGetEventById(string id)
+    public async Task<ResponseEvent?> EonetGetEventById(string id)
     {
         using var client = new HttpClient();
         
@@ -59,10 +73,16 @@ public class EonetService : IEonetService
         
         var jsonString = result.Content.ReadAsStringAsync().Result;
         
-        return JsonConvert.DeserializeObject<Event>(jsonString);
+        var eonetEvent = JsonConvert.DeserializeObject<EonetEvent>(jsonString);
+        
+        if (eonetEvent == null) return null;
+        
+        var responseEvent = EventConversionHelper.ConvertEonetEvent(eonetEvent);
+        
+        return responseEvent;
     }
     
-    public async Task<List<Event>?> EonetGetEventsForCategoryRegionAndYear(EventCategory category, Region region, int year)
+    public async Task<List<ResponseEvent>?> EonetGetEventsForCategoryRegionAndYear(EventCategory category, Region region, int year)
     {
         using var client = new HttpClient();
         
@@ -77,8 +97,17 @@ public class EonetService : IEonetService
         
         var jsonString = result.Content.ReadAsStringAsync().Result;
         
-        var response = JsonConvert.DeserializeObject<EonetEventListResult>(jsonString);
+        var eventList = JsonConvert.DeserializeObject<EonetEventListResult>(jsonString);
+
+        if (eventList?.Events == null) return null;
+
+        List<ResponseEvent> responseEvents = [];
         
-        return response?.Events;
+        foreach (var eventListEvent in eventList.Events)
+        {
+            responseEvents.Add(EventConversionHelper.ConvertEonetEvent(eventListEvent));
+        }
+            
+        return responseEvents;
     }
 }
