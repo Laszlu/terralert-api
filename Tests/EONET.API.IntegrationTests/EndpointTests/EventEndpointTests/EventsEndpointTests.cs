@@ -11,7 +11,7 @@ public class EventsEndpointTests : IClassFixture<WebApplicationFactory<IApiMarke
 {
     private readonly HttpClient _httpClient;
     
-    private ITestOutputHelper _outputHelper;
+    private readonly ITestOutputHelper _outputHelper;
 
     public EventsEndpointTests(WebApplicationFactory<IApiMarker> webApplicationFactory, ITestOutputHelper outputHelper)
     {
@@ -37,7 +37,7 @@ public class EventsEndpointTests : IClassFixture<WebApplicationFactory<IApiMarke
         _outputHelper.WriteLine("GetSingleEventByID");
 
         var currentEvents =
-            await _httpClient.GetAsync($"api/events/{EventCategoryMapper.AllCategories.First().Code}/current");
+            await _httpClient.GetAsync($"api/events/{EventCategoryMapper.AllCategories[0].Code}/current");
         
         var eventList = JsonConvert.DeserializeObject<List<EonetEvent>>(await currentEvents.Content.ReadAsStringAsync());
 
