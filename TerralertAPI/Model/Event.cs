@@ -153,7 +153,7 @@ public class RawJsonStringConverter : JsonConverter
 {
     public override bool CanConvert(Type objectType) => objectType == typeof(string);
 
-    public override object ReadJson(Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
     {
         if (reader.TokenType == JsonToken.StartArray || reader.TokenType == JsonToken.StartObject)
         {
@@ -163,7 +163,7 @@ public class RawJsonStringConverter : JsonConverter
         return reader.Value?.ToString();
     }
 
-    public override void WriteJson(Newtonsoft.Json.JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
     {
         var str = value as string;
         if (string.IsNullOrWhiteSpace(str))
@@ -172,7 +172,6 @@ public class RawJsonStringConverter : JsonConverter
             return;
         }
 
-        // Try to parse it as JSON — if valid, write raw
         try
         {
             var token = JToken.Parse(str);
@@ -180,7 +179,6 @@ public class RawJsonStringConverter : JsonConverter
         }
         catch
         {
-            // Fallback: write as plain string
             writer.WriteValue(str);
         }
     }

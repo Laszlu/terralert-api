@@ -13,7 +13,7 @@ public class EventController : ControllerBase
     private readonly IEonetService _eonetService;
     private readonly IMemoryCache _memoryCache;
     
-    private MemoryCacheEntryOptions _entryOptions;
+    private readonly MemoryCacheEntryOptions _entryOptions;
 
     public EventController(IEonetService eonetService, IMemoryCache memoryCache)
     {
