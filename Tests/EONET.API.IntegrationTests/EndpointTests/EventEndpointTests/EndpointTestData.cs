@@ -3,6 +3,19 @@ using TerralertAPI.Model;
 
 namespace EONET.API.IntegrationTests.EndpointTests.EventEndpointTests;
 
+public class CategoryData : IEnumerable<object[]>
+{
+    public IEnumerator<object[]> GetEnumerator()
+    {
+        foreach (var eventCategory in EventCategoryMapper.AllCategories)
+        {
+            yield return [eventCategory];
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+}
+
 public class CategoryRegionYearData : IEnumerable<object[]>
 {
     private readonly int[] _testYears = [2014, 2015, 2018, 2020, 2023, 2025];

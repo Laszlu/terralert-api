@@ -19,18 +19,16 @@ public class EventsEndpointTests : IClassFixture<WebApplicationFactory<IApiMarke
        _outputHelper = outputHelper;
     }
     
-    [Fact]
-    public async Task GetCurrentEventsByCategory_ValidRequest_ReturnsCurrentEvents()
+    [Theory]
+    [ClassData(typeof(CategoryData))]
+    public async Task GetCurrentEventsByCategory_ValidRequest_ReturnsCurrentEvents(EventCategory eventCategory)
     {
         _outputHelper.WriteLine("GetCurrentEventsByCategory");
         
-        foreach (var eventCategory in EventCategoryMapper.AllCategories)
-        {
-            var response = await _httpClient.GetAsync($"api/events/{eventCategory.Code}/current");
-            _outputHelper.WriteLine(response.Content.ReadAsStringAsync().Result);
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            response.Content.Should().NotBeNull();
-        }
+        var response = await _httpClient.GetAsync($"api/events/{eventCategory.Code}/current");
+        _outputHelper.WriteLine(response.Content.ReadAsStringAsync().Result);
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+        response.Content.Should().NotBeNull();
     }
 
     [Fact]
