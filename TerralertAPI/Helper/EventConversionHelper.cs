@@ -43,14 +43,12 @@ public static class EventConversionHelper
         switch (responseGeometry.Type)
         {
             case "Point":
-                Console.WriteLine(eonetGeometry.Coordinates);
                 var pointCoordinateFromJson = JsonConvert.DeserializeObject<List<double>>(eonetGeometry.Coordinates);
                 var pointCoordinates = new ResponseCoordinates { PointCoordinates = pointCoordinateFromJson, PolygonCoordinates = null};
                 responseGeometry.Coordinates = pointCoordinates;
                 break;
             case "Polygon":
-                Console.WriteLine(eonetGeometry.Coordinates);
-                var polygonCoordinatesFromJson = JsonConvert.DeserializeObject<List<List<double>>>(eonetGeometry.Coordinates);
+                var polygonCoordinatesFromJson = JsonConvert.DeserializeObject<List<List<List<double>>>>(eonetGeometry.Coordinates);
                 var polygonCoordinates = new ResponseCoordinates { PolygonCoordinates = polygonCoordinatesFromJson, PointCoordinates = null};
                 responseGeometry.Coordinates = polygonCoordinates;
                 break;

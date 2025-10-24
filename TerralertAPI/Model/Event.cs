@@ -1,9 +1,5 @@
-using System.Drawing;
-using System.Text.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using JsonException = Newtonsoft.Json.JsonException;
-using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace TerralertAPI.Model;
 
@@ -124,7 +120,8 @@ public class EonetGeometry
     public string? Type { get; set; }
 
     [JsonProperty("coordinates")]
-    public String? Coordinates { get; set; }
+    [JsonConverter(typeof(RawJsonStringConverter))]
+    public string? Coordinates { get; set; }
 }
 
 public class ResponseGeometry
@@ -149,5 +146,43 @@ public class ResponseCoordinates
 {
     public List<double>? PointCoordinates { get; set; }
     
-    public List<List<double>>? PolygonCoordinates { get; set; }
+    public List<List<List<double>>>? PolygonCoordinates { get; set; }
 }
+
+public class RawJsonStringConverter : JsonConverter
+{
+    public override bool CanConvert(Type objectType) => objectType == typeof(string);
+
+    public override object ReadJson(Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
+    {
+        if (reader.TokenType == JsonToken.StartArray || reader.TokenType == JsonToken.StartObject)
+        {
+            JToken token = JToken.Load(reader);
+            return token.ToString(Formatting.None);
+        }
+        return reader.Value?.ToString();
+    }
+
+    public override void WriteJson(Newtonsoft.Json.JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
+    {
+        var str = value as string;
+        if (string.IsNullOrWhiteSpace(str))
+        {
+            writer.WriteNull();
+            return;
+        }
+
+        // Try to parse it as JSON — if valid, write raw
+        try
+        {
+            var token = JToken.Parse(str);
+            token.WriteTo(writer);
+        }
+        catch
+        {
+            // Fallback: write as plain string
+            writer.WriteValue(str);
+        }
+    }
+}
+

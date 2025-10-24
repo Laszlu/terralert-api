@@ -96,9 +96,19 @@ public class EonetService : IEonetService
         var result = await client.SendAsync(message);
         
         var jsonString = result.Content.ReadAsStringAsync().Result;
-        
-        var eventList = JsonConvert.DeserializeObject<EonetEventListResult>(jsonString);
 
+        EonetEventListResult? eventList;
+        
+        try
+        {
+            eventList = JsonConvert.DeserializeObject<EonetEventListResult>(jsonString);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        
         if (eventList?.Events == null) return null;
 
         List<ResponseEvent> responseEvents = [];
