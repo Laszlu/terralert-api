@@ -5,9 +5,9 @@ namespace TerralertAPI.Helper;
 
 public static class EventConversionHelper
 {
-    public static ResponseEvent ConvertEonetEvent(EonetEvent eonetEvent)
+    public static TerralertEvent ConvertEonetEvent(EonetEvent eonetEvent)
     {
-        var responseEvent = new ResponseEvent
+        var responseEvent = new TerralertEvent
         {
             Id = eonetEvent.Id,
             Title = eonetEvent.Title,
@@ -27,9 +27,9 @@ public static class EventConversionHelper
         return responseEvent;
     }
     
-    private static ResponseGeometry ConvertStringCoordinates(EonetGeometry eonetGeometry)
+    private static TerralertGeometry ConvertStringCoordinates(EonetGeometry eonetGeometry)
     {
-        var responseGeometry = new ResponseGeometry
+        var responseGeometry = new TerralertGeometry
         {
             MagnitudeValue = eonetGeometry.MagnitudeValue,
             MagnitudeUnit = eonetGeometry.MagnitudeUnit,
@@ -44,12 +44,12 @@ public static class EventConversionHelper
         {
             case "Point":
                 var pointCoordinateFromJson = JsonConvert.DeserializeObject<List<double>>(eonetGeometry.Coordinates);
-                var pointCoordinates = new ResponseCoordinates { PointCoordinates = pointCoordinateFromJson, PolygonCoordinates = null};
+                var pointCoordinates = new TerralertCoordinates { PointCoordinates = pointCoordinateFromJson, PolygonCoordinates = null};
                 responseGeometry.Coordinates = pointCoordinates;
                 break;
             case "Polygon":
                 var polygonCoordinatesFromJson = JsonConvert.DeserializeObject<List<List<List<double>>>>(eonetGeometry.Coordinates);
-                var polygonCoordinates = new ResponseCoordinates { PolygonCoordinates = polygonCoordinatesFromJson, PointCoordinates = null};
+                var polygonCoordinates = new TerralertCoordinates { PolygonCoordinates = polygonCoordinatesFromJson, PointCoordinates = null};
                 responseGeometry.Coordinates = polygonCoordinates;
                 break;
         }

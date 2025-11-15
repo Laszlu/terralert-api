@@ -18,7 +18,7 @@ public class EonetEventListResult
     public List<EonetEvent>? Events { get; set; }
 }
 
-public class ResponseEventListResult
+public class TerralertEventListResult
 {
     [JsonProperty("title")]
     public string? Title { get; set; }
@@ -30,7 +30,7 @@ public class ResponseEventListResult
     public string? Link { get; set; }
 
     [JsonProperty("events")]
-    public List<ResponseEvent>? Events { get; set; }
+    public List<TerralertEvent>? Events { get; set; }
 }
 
 public class EonetEvent
@@ -60,7 +60,7 @@ public class EonetEvent
     public List<EonetGeometry>? Geometry { get; set; }
 }
 
-public class ResponseEvent
+public class TerralertEvent
 {
     [JsonProperty("id")]
     public string? Id { get; set; }
@@ -84,7 +84,7 @@ public class ResponseEvent
     public List<Source>? Sources { get; set; }
 
     [JsonProperty("geometry")]
-    public List<ResponseGeometry>? Geometry { get; set; }
+    public List<TerralertGeometry>? Geometry { get; set; }
 }
 
 public class Source
@@ -124,7 +124,7 @@ public class EonetGeometry
     public string? Coordinates { get; set; }
 }
 
-public class ResponseGeometry
+public class TerralertGeometry
 {
     [JsonProperty("magnitudeValue")]
     public float? MagnitudeValue { get; set; }
@@ -139,10 +139,10 @@ public class ResponseGeometry
     public string? Type { get; set; }
 
     [JsonProperty("coordinates")]
-    public ResponseCoordinates? Coordinates { get; set; }
+    public TerralertCoordinates? Coordinates { get; set; }
 }
 
-public class ResponseCoordinates
+public class TerralertCoordinates
 {
     public List<double>? PointCoordinates { get; set; }
     

@@ -41,7 +41,7 @@ public class EventController : ControllerBase
             return Ok(JsonConvert.SerializeObject(events));
         }
 
-        List<ResponseEvent>? results;
+        List<TerralertEvent>? results;
 
         try
         {
@@ -81,7 +81,7 @@ public class EventController : ControllerBase
             }
         }
 
-        ResponseEvent? result;
+        TerralertEvent? result;
 
         try
         {
@@ -127,7 +127,7 @@ public class EventController : ControllerBase
             return Ok(JsonConvert.SerializeObject(events));
         }
 
-        List<ResponseEvent>? results;
+        List<TerralertEvent>? results;
         
         try
         {

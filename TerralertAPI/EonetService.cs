@@ -11,11 +11,11 @@ public interface IEonetService
 
     public Region? ParseRegion(string requestRegion);
 
-    public Task<List<ResponseEvent>?> EonetGetCurrentEventsForCategory(string category);
+    public Task<List<TerralertEvent>?> EonetGetCurrentEventsForCategory(string category);
 
-    public Task<ResponseEvent?> EonetGetEventById(string id);
+    public Task<TerralertEvent?> EonetGetEventById(string id);
 
-    public Task<List<ResponseEvent>?> EonetGetEventsForCategoryRegionAndYear(EventCategory category, Region region, int year);
+    public Task<List<TerralertEvent>?> EonetGetEventsForCategoryRegionAndYear(EventCategory category, Region region, int year);
 }
 
 public class EonetService : IEonetService
@@ -34,7 +34,7 @@ public class EonetService : IEonetService
         return region;
     }
     
-    public async Task<List<ResponseEvent>?> EonetGetCurrentEventsForCategory(string category)
+    public async Task<List<TerralertEvent>?> EonetGetCurrentEventsForCategory(string category)
     {
         using var client = new HttpClient();
         
@@ -46,7 +46,7 @@ public class EonetService : IEonetService
 
         if (eventList?.Events == null) return null;
 
-        List<ResponseEvent> responseEvents = [];
+        List<TerralertEvent> responseEvents = [];
         
         foreach (var eventListEvent in eventList.Events)
         {
@@ -65,7 +65,7 @@ public class EonetService : IEonetService
         return responseEvents;
     }
 
-    public async Task<ResponseEvent?> EonetGetEventById(string id)
+    public async Task<TerralertEvent?> EonetGetEventById(string id)
     {
         using var client = new HttpClient();
         
@@ -82,7 +82,7 @@ public class EonetService : IEonetService
         return responseEvent;
     }
     
-    public async Task<List<ResponseEvent>?> EonetGetEventsForCategoryRegionAndYear(EventCategory category, Region region, int year)
+    public async Task<List<TerralertEvent>?> EonetGetEventsForCategoryRegionAndYear(EventCategory category, Region region, int year)
     {
         using var client = new HttpClient();
         
@@ -111,7 +111,7 @@ public class EonetService : IEonetService
         
         if (eventList?.Events == null) return null;
 
-        List<ResponseEvent> responseEvents = [];
+        List<TerralertEvent> responseEvents = [];
         
         foreach (var eventListEvent in eventList.Events)
         {
