@@ -39,7 +39,7 @@ public static class RegionCoordinateMapper
         Europe, Asia, Africa, NorthAmerica, SouthAmerica, Australia
     };
 
-    public static readonly IReadOnlyList<Region> VolcanoeRegions = new[]
+    public static readonly IReadOnlyList<Region> VolcanoRegions = new[]
     {
         Africa, Europe, PacificRingOfFire, NorthAmerica, CentralAmericaWithCaribbean, SouthAmerica, Asia, Oceania
     };

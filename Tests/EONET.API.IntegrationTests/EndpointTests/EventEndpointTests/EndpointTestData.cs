@@ -42,7 +42,7 @@ public class CategoryRegionYearData : IEnumerable<object[]>
 
                         break;
                     case "vo":
-                        foreach (var region in RegionCoordinateMapper.VolcanoeRegions)
+                        foreach (var region in RegionCoordinateMapper.VolcanoRegions)
                         {
                             yield return [eventCategory, region, year];
                         }
