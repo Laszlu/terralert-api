@@ -22,7 +22,7 @@ public class EventController : ControllerBase
 
         _entryOptions = new MemoryCacheEntryOptions
         {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24)
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(12)
         };
     }
     
